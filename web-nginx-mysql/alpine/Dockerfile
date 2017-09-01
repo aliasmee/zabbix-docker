@@ -41,7 +41,7 @@ ARG ZBX_VERSION=${MAJOR_VERSION}.1
 ARG ZBX_SOURCES=svn://svn.zabbix.com/tags/${ZBX_VERSION}/
 ENV ZBX_VERSION=${ZBX_VERSION} ZBX_SOURCES=${ZBX_SOURCES} DB_TYPE=${DB_TYPE}
 
-ADD conf/tmp/font-config /tmp/font-config
+ADD /web-nginx-mysql/alpine/conf/tmp/font-config /tmp/font-config
 
 RUN apk add ${APK_FLAGS_DEV} --virtual build-dependencies \
             coreutils \
@@ -67,14 +67,14 @@ WORKDIR /usr/share/zabbix
 
 VOLUME ["/etc/ssl/nginx"]
 
-ADD conf/etc/supervisor/ /etc/supervisor/
-ADD conf/etc/zabbix/nginx.conf /etc/zabbix/
-ADD conf/etc/zabbix/nginx_ssl.conf /etc/zabbix/
-ADD conf/etc/zabbix/web/zabbix.conf.php /etc/zabbix/web/
-ADD conf/etc/nginx/nginx.conf /etc/nginx/
-ADD conf/etc/php5/php-fpm.conf /etc/php5/
-ADD conf/etc/php5/conf.d/99-zabbix.ini /etc/php5/conf.d/
-ADD run_zabbix_component.sh /
+ADD /web-nginx-mysql/alpine/conf/etc/supervisor/ /etc/supervisor/
+ADD /web-nginx-mysql/alpine/conf/etc/zabbix/nginx.conf /etc/zabbix/
+ADD /web-nginx-mysql/alpine/conf/etc/zabbix/nginx_ssl.conf /etc/zabbix/
+ADD /web-nginx-mysql/alpine/conf/etc/zabbix/web/zabbix.conf.php /etc/zabbix/web/
+ADD /web-nginx-mysql/alpine/conf/etc/nginx/nginx.conf /etc/nginx/
+ADD /web-nginx-mysql/alpine/conf/etc/php5/php-fpm.conf /etc/php5/
+ADD /web-nginx-mysql/alpine/conf/etc/php5/conf.d/99-zabbix.ini /etc/php5/conf.d/
+ADD /web-nginx-mysql/alpine/run_zabbix_component.sh /
 
 ENTRYPOINT ["/bin/bash"]
 

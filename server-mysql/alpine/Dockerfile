@@ -115,8 +115,8 @@ WORKDIR /var/lib/zabbix
 VOLUME ["/usr/lib/zabbix/alertscripts", "/usr/lib/zabbix/externalscripts", "/var/lib/zabbix/enc", "/var/lib/zabbix/modules", "/var/lib/zabbix/ssh_keys"]
 VOLUME ["/var/lib/zabbix/ssl/certs", "/var/lib/zabbix/ssl/keys", "/var/lib/zabbix/ssl/ssl_ca", "/var/lib/zabbix/snmptraps", "/var/lib/zabbix/mibs"]
 
-ADD conf/etc/supervisor/ /etc/supervisor/
-ADD run_zabbix_component.sh /
+ADD /server-mysql/alpine/conf/etc/supervisor/ /etc/supervisor/
+ADD /server-mysql/alpine/run_zabbix_component.sh /
 
 ENTRYPOINT ["/bin/bash"]
 
