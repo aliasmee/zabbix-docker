@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.kubernetes.io/qcloud-loadbalancer-internal: "21186"
+    service.kubernetes.io/qcloud-loadbalancer-internal-subnetid: subnet-p9oq3uc1
+  labels:
+    component: zabbix-server
+  name: zabbix-server
+  namespace: devops
+spec:
+  clusterIP: 172.20.255.36
+  ports:
+  - name: server-port
+    port: 10051
+    protocol: TCP
+  selector:
+    component: zabbix-cluster
+    role: zabbix-server
+  sessionAffinity: None
+  type: LoadBalancer

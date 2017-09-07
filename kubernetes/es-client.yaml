@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zabbix-server
+  labels:
+    component: zabbix-cluster
+    role: zabbix-server
+  namespace: devops
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: zabbix-cluster
+        role: zabbix-server
+    spec:
+      initContainers:
+      - name: init-sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      containers:
+      - name: es2client
+        securityContext:
+          privileged: false
+          capabilities:
+            add:
+              - IPC_LOCK
+              - SYS_RESOURCE
+        image: ccr.ccs.tencentyun.com/zhulux_sre/zabbix-server:v0.2
+        imagePullPolicy: Always
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: "DB_SERVER_HOST"
+          value: "mysql"
+        - name: MYSQL_PASSWORD
+          value: ""
+        - name: MYSQL_USER
+          value: "root"
+        ports:
+        - containerPort: 10051
+          name: trapper
+          protocol: TCP
+        volumeMounts:
+        - name: storage
+          mountPath: /usr/lib/zabbix/alertscripts
+      imagePullSecrets:
+      - name: qcloudregistrykey
+      volumes:
+          - emptyDir:
+              medium: ""
+            name: "storage"

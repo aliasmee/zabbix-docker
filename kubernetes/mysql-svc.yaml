@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: devops
+  labels:
+    component: mysql
+spec:
+  selector:
+    component: zabbix-cluster
+    role: db
+  ports:
+    - name: mysqldb
+      port: 3306
+      protocol: TCP
+    
